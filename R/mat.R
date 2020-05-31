@@ -18,6 +18,8 @@
 #'   ncol = 3
 #' )
 #' is.positive.definite(Sigma)
+#' @references 
+#' [Wikipedia: Definiteness of a Matrix](https://en.wikipedia.org/wiki/Definiteness_of_a_matrix)
 #' @export
 is.positive.definite <- function(x,
                                  tol = 1e-8) {
