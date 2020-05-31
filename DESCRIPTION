@@ -25,6 +25,7 @@ Imports:
 	utils,
 	stats
 Suggests:
+    MASS,
 	knitr,
 	rmarkdown,
 	testthat,

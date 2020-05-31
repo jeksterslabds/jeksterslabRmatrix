@@ -18,8 +18,8 @@
 #'   ncol = 3
 #' )
 #' is.positive.definite(Sigma)
-#' @references 
-#' [Wikipedia: Definiteness of a Matrix](https://en.wikipedia.org/wiki/Definiteness_of_a_matrix)
+#' @references
+#'   [Wikipedia: Definiteness of a Matrix](https://en.wikipedia.org/wiki/Definiteness_of_a_matrix)
 #' @export
 is.positive.definite <- function(x,
                                  tol = 1e-8) {
@@ -57,6 +57,8 @@ is.positive.definite <- function(x,
 #'   ncol = 3
 #' )
 #' is.singular.matrix(Sigma)
+#' @references
+#'   [Wikipedia: Singular Matrix](https://en.wikipedia.org/wiki/Singular_matrix)
 #' @export
 is.singular.matrix <- function(x,
                                tol = 1e-8) {
@@ -112,6 +114,8 @@ cor2cov <- function(cor,
 #'   ncol = 3
 #' )
 #' tr(Sigma)
+#' @references
+#'   [Wikipedia: Trace (Linear Algebra)](https://en.wikipedia.org/wiki/Trace_(linear_algebra))
 #' @export
 tr <- function(x) {
   if (dim(x)[1] == dim(x)[2]) {
