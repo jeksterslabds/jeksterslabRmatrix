@@ -77,3 +77,10 @@ test_that("is.positive.definite is FALSE", {
     is.positive.definite(F)
   )
 })
+#'
+#+ testthat_03, echo=TRUE
+test_that("is.positive.definite is FALSE (expect_error)", {
+  expect_error(
+    is.positive.definite(F, stop = TRUE)
+  )
+})
