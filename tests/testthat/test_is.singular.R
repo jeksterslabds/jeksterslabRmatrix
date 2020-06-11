@@ -1,10 +1,10 @@
 #' ---
-#' title: "Test: is.singular.matrix"
+#' title: "Test: is.singular"
 #' author: "Ivan Jacob Agaloos Pesigan"
 #' date: "`r Sys.Date()`"
 #' output: rmarkdown::html_vignette
 #' vignette: >
-#'   %\VignetteIndexEntry{Test: is.singular.matrix}
+#'   %\VignetteIndexEntry{Test: is.singular}
 #'   %\VignetteEngine{knitr::rmarkdown}
 #'   %\VignetteEncoding{UTF-8}
 #' ---
@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 #+ setup
 library(testthat)
 library(jeksterslabRmatrix)
-context("Test is.singular.matrix.")
+context("Test is.singular.")
 #'
 #' ## Parameters
 #'
@@ -56,8 +56,8 @@ knitr::kable(
       "TRUE"
     ),
     Results = c(
-      is.singular.matrix(F),
-      is.singular.matrix(T)
+      is.singular(F),
+      is.singular(T)
     )
   ),
   row.names = FALSE
@@ -66,15 +66,15 @@ knitr::kable(
 #' ## testthat
 #'
 #+ testthat_01, echo=TRUE
-test_that("is.singular.matrix is TRUE", {
+test_that("is.singular is TRUE", {
   expect_true(
-    is.singular.matrix(T)
+    is.singular(T)
   )
 })
 #'
 #+ testthat_02, echo=TRUE
-test_that("is.singular.matrix is FALSE", {
+test_that("is.singular is FALSE", {
   expect_false(
-    is.singular.matrix(F)
+    is.singular(F)
   )
 })
