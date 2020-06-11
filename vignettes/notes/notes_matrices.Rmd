@@ -1,0 +1,608 @@
+---
+title: "Notes: Matrices"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Notes: Matrices}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r knitr_options, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  error = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+```
+
+Notes from
+"Matrix Algebra
+From a
+Statistician's
+Perspective"
+by
+David A. Harville.
+
+```{r, echo = FALSE}
+# do not change m and n
+m <- 4
+n <- 3
+a <- c(
+  6,
+  5,
+  9,
+  -2,
+  10,
+  1,
+  7,
+  11,
+  4.25,
+  12,
+  -8,
+  3
+)
+b <- c(
+  3,
+  10,
+  -4,
+  6,
+  5.5,
+  9,
+  -1,
+  7,
+  12,
+  2,
+  8.01,
+  11
+)
+c <- c(
+  9,
+  5,
+  3,
+  1.78,
+  10,
+  7,
+  8,
+  12,
+  2.45,
+  6,
+  11,
+  4
+)
+k <- 2
+s <- 3
+A <- matrix(
+  data = a,
+  nrow = m,
+  ncol = n
+)
+B <- matrix(
+  data = b,
+  nrow = m,
+  ncol = n
+)
+C <- matrix(
+  data = c,
+  nrow = m,
+  ncol = n
+)
+```
+
+## Matrix
+
+### Definition and Notation
+
+- rectangular array of real numbers ($\mathbb{R}$)
+- represented by boldface capital letters (e.g., $\mathbf{A}$)
+- a matrix having $m$ rows and $n$ columns
+  is refered to as an $m \times n$ matrix
+  and $m$ and $n$ are dimensions of the matrix
+- elements of a matrix
+  are represented with small letters
+  with subscript $ij$ to represent
+  the $i$th (row) and
+  the $jth$ (column) element
+  (e.g., $\mathbf{A} = \left\{ a_{ij} \right\}$).
+
+\begin{equation}
+  \mathbf{A}
+  =
+  \begin{pmatrix}
+    a_{11} & a_{12} & \cdots & a_{1n} \\
+    a_{21} & a_{22} & \cdots & a_{2n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{m1} & a_{m2} & \cdots & a_{mn} \\
+  \end{pmatrix}
+  =
+  \begin{bmatrix}
+    a_{11} & a_{12} & \cdots & a_{1n} \\
+    a_{21} & a_{22} & \cdots & a_{2n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{m1} & a_{m2} & \cdots & a_{mn} \\
+  \end{bmatrix}
+  =
+  \left(
+    a_{ij} \in \mathbb{R}^{m \times n}
+  \right)
+\end{equation}
+
+For example,
+
+\begin{equation}
+  \mathbf{A}
+  =
+  \begin{bmatrix}
+    `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+    `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+    `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+    `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+  \end{bmatrix}
+\end{equation}
+
+$\mathbf{A}$ is a $`r nrow(A)` \times `r ncol(A)`$ matrix.
+$`r A[1, 1]`$ is the $a_{11}$th element,
+$`r A[4, 1]`$ is the $a_{41}$th element,
+$`r A[1, 3]`$ is the $a_{13}$th element,
+and
+$`r A[m, n]`$ is the $a_{`r m` `r n`}$th element
+of matrix
+$\mathbf{A}$.
+
+### Scalar Multiplication
+
+Scalar multiplication is the product of scalar and a matrix.
+A scalar is a single real number.
+The scalar multiplication of $k$ and $\mathbf{A}$
+is given by
+$k \mathbf{A}$.
+
+Let
+
+\begin{equation}
+  k
+  =
+  `r k` ,
+\end{equation}
+
+\noindent and
+
+\begin{equation}
+  \mathbf{A}
+  =
+  \begin{bmatrix}
+    `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+    `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+    `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+    `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+  \end{bmatrix}
+\end{equation}
+
+\noindent then
+
+\begin{equation}
+  k \mathbf{A}
+  =
+  `r k`
+  \begin{bmatrix}
+    `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+    `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+    `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+    `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    `r k` \cdot `r A[1, 1]` & `r k` \cdot `r A[1, 2]` &  `r k` \cdot `r A[1, 3]` \\
+    `r k` \cdot `r A[2, 1]` & `r k` \cdot `r A[2, 2]` &  `r k` \cdot `r A[2, 3]` \\
+    `r k` \cdot `r A[3, 1]` & `r k` \cdot `r A[3, 2]` &  `r k` \cdot `r A[3, 3]` \\
+    `r k` \cdot `r A[4, 1]` & `r k` \cdot `r A[4, 2]` &  `r k` \cdot `r A[4, 3]`
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    `r k * A[1, 1]` & `r k * A[1, 2]` &  `r k * A[1, 3]` \\
+    `r k * A[2, 1]` & `r k * A[2, 2]` &  `r k * A[2, 3]` \\
+    `r k * A[3, 1]` & `r k * A[3, 2]` &  `r k * A[3, 3]` \\
+    `r k * A[4, 1]` & `r k * A[4, 2]` &  `r k * A[4, 3]`
+  \end{bmatrix} .
+\end{equation}
+
+Scalar multiplication can be performed in
+**`R`**,
+using the `*` operator.
+
+```{r}
+k * A
+```
+
+The matrix
+$k \mathbf{A}$
+is said to be a scalar multiple of
+$\mathbf{A}$.
+
+For any matrix $\mathbf{A}$,
+
+\begin{equation}
+  1 \mathbf{A} = \mathbf{A} .
+\end{equation}
+
+For any scalar $s$ and $k$ and any matrix $\mathbf{A}$
+
+\begin{equation}
+  s \left( k \mathbf{A} \right)
+  =
+  \left( sk \mathbf{A} \right)
+  =
+  \left( ks \mathbf{A} \right)
+  =
+  k \left( s \mathbf{A} \right) .
+\end{equation}
+
+The scalar product $\left(-1 \right) \mathbf{A}$
+is the negative of $\mathbf{A}$
+or simply
+$- \mathbf{A}$.
+
+### Matrix Addition and Subtraction
+
+The sum (or difference) of two matrices
+$\mathbf{A}$
+and $\mathbf{B}$,
+is the sum (or difference) of element $ij$th element
+in matrix $\mathbf{A}$
+($a_{ij}$)
+and the $ij$th element
+in matrix $\mathbf{B}$
+($b_{ij}$).
+As such,
+the two matrices should have the same dimensions
+(*conformal* for addition or subtraction).
+
+For example,
+
+\begin{equation}
+\begin{split}
+  \mathbf{A} + \mathbf{B}
+  &=
+  \begin{bmatrix}
+    `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+    `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+    `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+    `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+  \end{bmatrix}
+  +
+  \begin{bmatrix}
+    `r B[1, 1]` & `r B[1, 2]` & `r B[1, 3]` \\
+    `r B[2, 1]` & `r B[2, 2]` & `r B[2, 3]` \\
+    `r B[3, 1]` & `r B[3, 2]` & `r B[3, 3]` \\
+    `r B[4, 1]` & `r B[4, 2]` & `r B[4, 3]`
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+    `r A[1, 1]` + `r B[1, 1]` & `r A[1, 2]` + `r B[1, 2]` & `r A[1, 3]` + `r B[1, 3]` \\
+    `r A[2, 1]` + `r B[2, 1]` & `r A[2, 2]` + `r B[2, 2]` & `r A[2, 3]` + `r B[2, 3]` \\
+    `r A[3, 1]` + `r B[3, 1]` & `r A[3, 2]` + `r B[3, 2]` & `r A[3, 3]` + `r B[3, 3]` \\
+    `r A[4, 1]` + `r B[4, 1]` & `r A[4, 2]` + `r B[4, 2]` & `r A[4, 3]` + `r B[4, 3]`
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+    `r A[1, 1] + B[1, 1]` & `r A[1, 2] + B[1, 2]` & `r A[1, 3] + B[1, 3]` \\
+    `r A[2, 1] + B[2, 1]` & `r A[2, 2] + B[2, 2]` & `r A[2, 3] + B[2, 3]` \\
+    `r A[3, 1] + B[3, 1]` & `r A[3, 2] + B[3, 2]` & `r A[3, 3] + B[3, 3]` \\
+    `r A[4, 1] + B[4, 1]` & `r A[4, 2] + B[4, 2]` & `r A[4, 3] + B[4, 3]`
+  \end{bmatrix}
+\end{split}
+\end{equation}
+
+In **`R`**, matrix addition can be performed
+using the `+` operator.
+
+```{r}
+A + B
+```
+
+Matrix addition is commutative, that is
+
+\begin{equation}
+  \mathbf{A} + \mathbf{B}
+  =
+  \mathbf{B} + \mathbf{A} .
+\end{equation}
+
+Matrix addition is associative, that is
+
+\begin{equation}
+  \mathbf{A}
+  +
+  \left(
+    \mathbf{B}
+    +
+    \mathbf{C}
+  \right)
+  =
+  \left(
+    \mathbf{A}
+    +
+    \mathbf{B}
+  \right)
+  +
+  \mathbf{C}
+  =
+  \mathbf{A}
+  +
+  \mathbf{B}
+  +
+  \mathbf{C} .
+\end{equation}
+
+For any scalar $s$, we have
+
+\begin{equation}
+  s
+  \left(
+    \mathbf{A}
+    +
+    \mathbf{B}
+  \right)
+  =
+  s \mathbf{A}
+  +
+  s \mathbf{B}
+\end{equation}
+
+\noindent and, for any scalars $s$ and $k$, we have
+
+\begin{equation}
+  \left(
+    s
+    +
+    k
+  \right)
+  \mathbf{A}
+  =
+  s
+  \mathbf{A}
+  +
+  k
+  \mathbf{A} .
+\end{equation}
+
+$\mathbf{A} - \mathbf{B}$ is the sum of $\mathbf{A} + \left( - \mathbf{B} \right)$
+or $a_{ij} - b_{ij}$.
+Note that
+$\mathbf{A} - \mathbf{B} \neq \mathbf{B} - \mathbf{A}$.
+
+### Matrix Multiplication
+
+```{r, echo = FALSE}
+a <- c(
+  4,
+  1,
+  -4,
+  5,
+  0,
+  2
+)
+b <- c(
+  8,
+  3,
+  -2,
+  -5,
+  3,
+  1
+)
+A <- matrix(
+  data = a,
+  ncol = 3
+)
+B <- matrix(
+  data = b,
+  ncol = 2
+)
+```
+
+Let $\mathbf{A} = \left\{ a_{ij} \right\} \in \mathbb{R}^{m \times n}$,
+and
+$\mathbf{B} = \left\{ b_{ij} \right\} \in \mathbb{R}^{p \times q}$.
+When $n = p$,
+that is, the number of colums of $\mathbf{A}$
+is equal to the number of rows of $\mathbf{B}$,
+the *matrix product*
+$\mathbf{AB}$
+is defined to be the
+$m \times q$ matrix whose $ij$th element is
+
+\begin{equation}
+  \sum_{k = 1}^{n}
+  a_{ik} b_{kj}
+  =
+  a_{i1} b_{1j}
+  +
+  a_{i2} b_{2j}
+  +
+  \dots
+  +
+  a_{in} b_{nj} .
+\end{equation}
+
+For example,
+let
+
+\begin{equation}
+  \mathbf{A}
+  =
+  \begin{bmatrix}
+    `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+    `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]`
+  \end{bmatrix}
+\end{equation}
+
+\noindent and
+
+\begin{equation}
+  \mathbf{B}
+  =
+  \begin{bmatrix}
+    `r B[1, 1]` & `r B[1, 2]` \\
+    `r B[2, 1]` & `r B[2, 2]` \\
+    `r B[3, 1]` & `r B[3, 2]`
+  \end{bmatrix}
+\end{equation}
+
+\noindent then
+
+\begin{equation}
+\begin{split}
+  \mathbf{A} \mathbf{B}
+  &=
+  \begin{bmatrix}
+    `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+    `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]`
+  \end{bmatrix}
+  \begin{bmatrix}
+    `r B[1, 1]` & `r B[1, 2]` \\
+    `r B[2, 1]` & `r B[2, 2]` \\
+    `r B[3, 1]` & `r B[3, 2]`
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+    \left( `r A[1, 1]` \right) \left( `r B[1, 1]` \right) + \left( `r A[1, 2]` \right) \left( `r B[2, 1]` \right) + \left( `r A[1, 3]` \right) \left( `r B[3, 1]` \right) & \left( `r A[1, 1]` \right) \left( `r B[1, 2]` \right) + \left( `r A[1, 2]` \right) \left( `r B[2, 2]` \right) + \left( `r A[1, 3]` \right) \left( `r B[3,2]` \right) \\
+    \left( `r A[2, 1]` \right) \left( `r B[1, 1]` \right) + \left( `r A[2, 2]` \right) \left( `r B[2, 1]` \right) + \left( `r A[2, 3]` \right) \left( `r B[3, 1]` \right) & \left( `r A[2, 1]` \right) \left( `r B[1, 2]` \right) + \left( `r A[2, 2]` \right) \left( `r B[2, 2]` \right) + \left( `r A[2, 3]` \right) \left( `r B[3,2]` \right)
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+    `r A[1, 1] * B[1, 1] + A[1, 2] * B[2, 1] + A[1, 3] * B[3, 1]` & `r A[1, 1] * B[1, 2] + A[1, 2] * B[2, 2] + A[1, 3] * B[3,2]` \\
+    `r A[2, 1] * B[1, 1] + A[2, 2] * B[2, 1] + A[2, 3] * B[3, 1]` & `r A[2, 1] * B[1, 2] + A[2, 2] * B[2, 2] + A[2, 3] * B[3,2]`
+  \end{bmatrix} .
+\end{split}
+\end{equation}
+
+In **`R`**, matrix multiplication can be performed
+using the `%*%` operator.
+
+```{r}
+A %*% B
+```
+
+Using the `*` operator for matrix multiplication
+results in an error.
+
+```{r}
+A * B
+```
+
+The matrix product $\mathbf{AB}$
+is referred to as the
+*premultiplication* of
+$\mathbf{B}$ by $\mathbf{A}$
+or the
+*postmultiplication* of
+$\mathbf{A}$ by $\mathbf{B}$.
+When $n \neq p$,
+the matrix product $\mathbf{AB}$
+is undefined.
+
+Matrix multiplication is associative.
+
+\begin{equation}
+  \mathbf{A}
+  \left(
+    \mathbf{B}
+    \mathbf{C}
+  \right)
+  =
+  \left(
+    \mathbf{A}
+    \mathbf{B}
+  \right)
+  \mathbf{C}
+  =
+  \mathbf{A}
+  \mathbf{B}
+  \mathbf{C} ,
+\end{equation}
+
+provided that $p = n$
+and that
+$\mathbf{C}$
+has $q$ rows so that the matrix multiplications
+required to form the left and right side of the equality are defined.
+
+Matrix multiplication is associative.
+
+\begin{equation}
+  \mathbf{A}
+  \left(
+    \mathbf{B}
+    \mathbf{C}
+  \right)
+  =
+  \mathbf{A}
+  \mathbf{B}
+  +
+  \mathbf{A}
+  \mathbf{C} ,
+\end{equation}
+
+\begin{equation}
+  \left(
+    \mathbf{A}
+    +
+    \mathbf{B}
+  \right)
+  \mathbf{C}
+  =
+  \mathbf{A}
+  \mathbf{C}
+  +
+  \mathbf{B}
+  \mathbf{C} ,
+\end{equation}
+
+where,
+in each equality,
+it is assumed that the dimensions of
+$\mathbf{A}$,
+$\mathbf{B}$, and
+$\mathbf{C}$
+are such that all multiplications and additions are defined.
+
+In general,
+matrix multiplication is *not commutative*.
+
+For any scalar $s$,
+$m \times n$
+matrix
+$\mathbf{A}$,
+and
+$n \times p$
+matrix
+$\mathbf{B}$,
+it is customary to write
+$s \mathbf{AB}$
+for the scalar product
+$s \left( \mathbf{AB} \right)$
+of
+$s$
+and the matrix product
+$\mathbf{AB}$.
+
+\begin{equation}
+  s
+  \mathbf{AB}
+  =
+  \left(
+    s
+    \mathbf{A}
+  \right)
+  \mathbf{B}
+  =
+  \mathbf{A}
+  \left(
+    s
+    \mathbf{B}
+  \right) .
+\end{equation}
+
+### Transposition

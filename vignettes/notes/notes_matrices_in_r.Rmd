@@ -1,0 +1,1219 @@
+---
+title: "Notes: Matrices in R"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Notes: Matrices in R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r knitr_options, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  error = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+```
+
+A matrix is a two dimensional data structure in `R`.
+The dimensions ($m \times n$)
+are stored as an `attribute`
+`dim`
+which can be accessed using the `attributes()` function.
+
+The following are some useful functions related to matrices.
+
+- `matrix()` - creates a matrix
+- `as.matrix()` - attempts to coerce its argument into a matrix
+- `is.matrix()` - tests if its argument is a matrix
+
+The example below creates a $3 \times 3$ matrix $\mathbf{A}$
+from a vector $\mathbf{a}$
+consisting is numbers 1 to 9.
+
+```{r}
+a <- 1:9
+A <- matrix(
+  data = a,
+  ncol = 3
+)
+A
+attributes(A)
+```
+
+The dimensions are set using `nrow` and `ncol`.
+Notice that in the example above
+only `ncol` is specified.
+`R` is smart enough to determine
+the corresponding `nrow`
+based on the length of the input data.
+
+By default,
+`matrix()`
+is populated by column,
+setting the argument `byrow = TRUE`
+populates the matrix by row.
+
+```{r}
+b <- 1:9
+B <- matrix(
+  data = b,
+  ncol = 3,
+  byrow = TRUE
+)
+B
+```
+
+A vector can be transformed into a matrix
+by providing the appropriate dimensions
+using the `dim()` function.
+
+```{r}
+x <- 1:9
+x
+dim(x) <- c(3, 3)
+x
+```
+
+Matrices can also be created
+by binding several vectors
+by column (`cbind()`)
+or
+by row (`rbind()`).
+
+```{r}
+col_1 <- 1:9
+col_2 <- 10:18
+col_3 <- 19:27
+C <- cbind(col_1, col_2, col_3)
+C
+is.matrix(C)
+row_1 <- 1:9
+row_2 <- 10:18
+row_3 <- 19:27
+R <- rbind(row_1, row_2, row_3)
+R
+is.matrix(R)
+```
+
+Notice that dimension names are inherited
+from the vectors used to create the matrix.
+Dimension names can also be explicitly provided
+using the argument `dimnames`
+which accepts a list.
+The first element of the list provides row names.
+The second element of the list provides column names.
+
+```{r}
+X <- matrix(
+  data = 1:9,
+  ncol = 3,
+  dimnames = list(
+    c("a", "b", "c"),
+    c("x", "y", "z")
+  )
+)
+X
+```
+
+The functions `colnames()` and `rownames()`
+can also be used to name dimensions of an existing matrix.
+
+```{r}
+colnames(X) <- c("col_1", "col_2", "col_3")
+rownames(X) <- c("row_1", "row_2", "row_3")
+X
+```
+
+A data frame can be coerced into a matrix using `as.matrix()`.
+Note that unlike data frames,
+matrices in `R` can only contain values of the same type.
+Elements are coerced to a common type.
+
+```{r}
+Y <- as.matrix(iris)
+head(Y)
+```
+
+Since the data frame iris has a column with character strings (column 5),
+all the elements in the resulting matrix `Y`
+are coerced to the type `character`.
+
+Since we are only interested in numeric matrices,
+removing the fifth column and coercing the data frame
+into a matrix results in a numeric matrix
+consisting of doubles.
+
+```{r}
+df <- iris[-c(5)]
+head(df)
+is.matrix(df)
+is.data.frame(df)
+Z <- as.matrix(df)
+head(Z)
+is.matrix(Z)
+typeof(Z)
+```
+
+## Matrix Operations
+
+```{r, echo = FALSE}
+m <- 3
+n <- 3
+x <- 1:9
+a <- sample(
+  x = x,
+  size = m * n,
+  replace = TRUE
+)
+b <- sample(
+  x = x,
+  size = m * n,
+  replace = TRUE
+)
+c <- sample(
+  x = x,
+  size = m * n,
+  replace = TRUE
+)
+k <- sample(
+  x = x,
+  size = 1
+)
+s <- sample(
+  x = x,
+  size = 1
+)
+A <- matrix(
+  data = a,
+  ncol = m
+)
+B <- matrix(
+  data = b,
+  ncol = m
+)
+C <- matrix(
+  data = c,
+  ncol = m
+)
+```
+
+Let
+
+\begin{equation}
+  k
+  =
+  `r k` ,
+\end{equation}
+
+\begin{equation}
+  s
+  =
+  `r s`,
+\end{equation}
+
+\begin{equation}
+  \mathbf{A}
+  =
+  \begin{bmatrix}
+    `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+    `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+    `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]`
+  \end{bmatrix} ,
+\end{equation}
+
+\begin{equation}
+  \mathbf{B}
+  =
+  \begin{bmatrix}
+    `r B[1, 1]` & `r B[1, 2]` & `r B[1, 3]` \\
+    `r B[2, 1]` & `r B[2, 2]` & `r B[2, 3]` \\
+    `r B[3, 1]` & `r B[3, 2]` & `r B[3, 3]`
+  \end{bmatrix} ,
+\end{equation}
+
+\noindent and
+
+\begin{equation}
+  \mathbf{C}
+  =
+  \begin{bmatrix}
+    `r C[1, 1]` & `r C[1, 2]` & `r C[1, 3]` \\
+    `r C[2, 1]` & `r C[2, 2]` & `r C[2, 3]` \\
+    `r C[3, 1]` & `r C[3, 2]` & `r C[3, 3]`
+  \end{bmatrix} .
+\end{equation}
+
+### Scalar multiplication
+
+The operator `*` is used for scalar multiplication.
+
+\begin{equation}
+  k \mathbf{A}
+\end{equation}
+
+```{r}
+k * A
+```
+
+\begin{equation}
+  s \left( k \mathbf{A} \right)
+  =
+  \left( sk \mathbf{A} \right)
+  =
+  \left( ks \mathbf{A} \right)
+  =
+  k \left( s \mathbf{A} \right) .
+\end{equation}
+
+```{r}
+s * (k * A)
+(s * k * A)
+(k * s) * A
+k * (s * A)
+```
+
+### Matrix addition and subtraction
+
+The operator `+` is used for matrix addition.
+The operator `-` is used for matrix subtraction.
+
+\begin{equation}
+  \mathbf{A} + \mathbf{B}
+\end{equation}
+
+```{r}
+A + B
+A - B
+```
+
+\begin{equation}
+  \mathbf{A} + \mathbf{B}
+  =
+  \mathbf{B} + \mathbf{A}
+\end{equation}
+
+```{r}
+A + B
+B + A
+```
+
+\begin{equation}
+  \mathbf{A}
+  +
+  \left(
+    \mathbf{B}
+    +
+    \mathbf{C}
+  \right)
+  =
+  \left(
+    \mathbf{A}
+    +
+    \mathbf{B}
+  \right)
+  +
+  \mathbf{C}
+  =
+  \mathbf{A}
+  +
+  \mathbf{B}
+  +
+  \mathbf{C}
+\end{equation}
+
+```{r}
+A + (B + C)
+(A + B) + C
+A + B + C
+```
+
+\begin{equation}
+  s
+  \left(
+    \mathbf{A}
+    +
+    \mathbf{B}
+  \right)
+  =
+  s \mathbf{A}
+  +
+  s \mathbf{B}
+\end{equation}
+
+```{r}
+s * (A + B)
+s * A + s * B
+```
+
+\begin{equation}
+  \left(
+    s
+    +
+    k
+  \right)
+  \mathbf{A}
+  =
+  s
+  \mathbf{A}
+  +
+  k
+  \mathbf{A}
+\end{equation}
+
+```{r}
+(s + k) * A
+s * A + k * A
+```
+
+
+
+
+```{r, echo = FALSE}
+# do not change m and n
+m <- 4
+n <- 3
+a <- c(
+  6,
+  5,
+  9,
+  -2,
+  10,
+  1,
+  7,
+  11,
+  4.25,
+  12,
+  -8,
+  3
+)
+b <- c(
+  3,
+  10,
+  -4,
+  6,
+  5.5,
+  9,
+  -1,
+  7,
+  12,
+  2,
+  8.01,
+  11
+)
+c <- c(
+  9,
+  5,
+  3,
+  1.78,
+  10,
+  7,
+  8,
+  12,
+  2.45,
+  6,
+  11,
+  4
+)
+k <- 2
+s <- 3
+A <- matrix(
+  data = a,
+  nrow = m,
+  ncol = n
+)
+B <- matrix(
+  data = b,
+  nrow = m,
+  ncol = n
+)
+C <- matrix(
+  data = c,
+  nrow = m,
+  ncol = n
+)
+```
+
+
+
+```{r}
+k * A
+```
+
+
+```{r}
+A + B
+```
+
+
+
+## Examples
+
+Let
+\begin{equation}
+  s
+  =
+  `r s` ,
+\end{equation}
+
+\begin{equation}
+  k
+  =
+  `r k` ,
+\end{equation}
+
+\noindent and
+
+\begin{equation}
+  \mathbf{A}
+  =
+  \begin{bmatrix}
+    `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+    `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+    `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+    `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+  \end{bmatrix}
+\end{equation}
+
+1. $k \mathbf{A}$
+
+    \begin{equation}
+    \begin{split}
+      k \mathbf{A}
+      &=
+      `r k`
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r k * A[1, 1]` & `r k * A[1, 2]` &  `r k * A[1, 3]` \\
+        `r k * A[2, 1]` & `r k * A[2, 2]` &  `r k * A[2, 3]` \\
+        `r k * A[3, 1]` & `r k * A[3, 2]` &  `r k * A[3, 3]` \\
+        `r k * A[4, 1]` & `r k * A[4, 2]` &  `r k * A[4, 3]`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+k * A
+    ```
+
+1. $\mathbf{A} + \mathbf{B}$
+
+    \begin{equation}
+    \begin{split}
+      \mathbf{A} + \mathbf{B}
+      &=
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix}
+      +
+      \begin{bmatrix}
+        `r B[1, 1]` & `r B[1, 2]` & `r B[1, 3]` \\
+        `r B[2, 1]` & `r B[2, 2]` & `r B[2, 3]` \\
+        `r B[3, 1]` & `r B[3, 2]` & `r B[3, 3]` \\
+        `r B[4, 1]` & `r B[4, 2]` & `r B[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r A[1, 1] + B[1, 1]` & `r A[1, 2] + B[1, 2]` & `r A[1, 3] + B[1, 3]` \\
+        `r A[2, 1] + B[2, 1]` & `r A[2, 2] + B[2, 2]` & `r A[2, 3] + B[2, 3]` \\
+        `r A[3, 1] + B[3, 1]` & `r A[3, 2] + B[3, 2]` & `r A[3, 3] + B[3, 3]` \\
+        `r A[4, 1] + B[4, 1]` & `r A[4, 2] + B[4, 2]` & `r A[4, 3] + B[4, 3]`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+A + B
+    ```
+1. $s \left( k \mathbf{A} \right)$
+
+    \begin{equation}
+    \begin{split}
+      s
+      \left(
+        k \mathbf{A}
+      \right)
+      &=
+      `r s`
+      \left(
+        `r k`
+        \begin{bmatrix}
+          `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+          `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+          `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+          `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+        \end{bmatrix}
+      \right) \\
+      &=
+      `r s`
+      \begin{bmatrix}
+        `r k * A[1, 1]` & `r k * A[1, 2]` & `r k * A[1, 3]` \\
+        `r k * A[2, 1]` & `r k * A[2, 2]` & `r k * A[2, 3]` \\
+        `r k * A[3, 1]` & `r k * A[3, 2]` & `r k * A[3, 3]` \\
+        `r k * A[4, 1]` & `r k * A[4, 2]` & `r k * A[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r s * k * A[1, 1]` & `r s * k * A[1, 2]` & `r s * k * A[1, 3]` \\
+        `r s * k * A[2, 1]` & `r s * k * A[2, 2]` & `r s * k * A[2, 3]` \\
+        `r s * k * A[3, 1]` & `r s * k * A[3, 2]` & `r s * k * A[3, 3]` \\
+        `r s * k * A[4, 1]` & `r s * k * A[4, 2]` & `r s * k * A[4, 3]`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+s * (k * A)
+    ```
+
+1. $\left( sk \mathbf{A} \right)$
+
+    \begin{equation}
+    \begin{split}
+      \left(
+        sk
+        \mathbf{A}
+      \right)
+      &=
+      \left(
+        `r s` \times `r k`
+        \begin{bmatrix}
+          `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+          `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+          `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]`
+        \end{bmatrix}
+      \right) \\
+      &=
+      `r s * k`
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r s * k * A[1, 1]` & `r s * k * A[1, 2]` & `r s * k * A[1, 3]` \\
+        `r s * k * A[2, 1]` & `r s * k * A[2, 2]` & `r s * k * A[2, 3]` \\
+        `r s * k * A[3, 1]` & `r s * k * A[3, 2]` & `r s * k * A[3, 3]`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+(s * k * A)
+    ```
+
+1. $\left( ks \mathbf{A} \right)$
+
+    \begin{equation}
+    \begin{split}
+      \left(
+        ks
+        \mathbf{A}
+      \right)
+      &=
+      \left(
+        `r k` \times `r s`
+        \begin{bmatrix}
+          `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+          `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+          `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+          `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+        \end{bmatrix}
+      \right) \\
+      &=
+      `r k * s`
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r k * s * A[1, 1]` & `r k * s * A[1, 2]` & `r k * s * A[1, 3]` \\
+        `r k * s * A[2, 1]` & `r k * s * A[2, 2]` & `r k * s * A[2, 3]` \\
+        `r k * s * A[3, 1]` & `r k * s * A[3, 2]` & `r k * s * A[3, 3]` \\
+        `r k * s * A[4, 1]` & `r k * s * A[4, 2]` & `r k * s * A[4, 3]`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+(k * s * A)
+    ```
+
+1. $k \left( s \mathbf{A} \right)$
+
+    \begin{equation}
+    \begin{split}
+      k
+      \left(
+        s
+        \mathbf{A}
+      \right)
+      &=
+      `r k`
+      \left(
+        `r s`
+        \begin{bmatrix}
+          `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+          `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+          `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+          `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+        \end{bmatrix}
+      \right) \\
+      &=
+      `r k`
+      \begin{bmatrix}
+        `r s * A[1, 1]` & `r s * A[1, 2]` & `r s * A[1, 3]` \\
+        `r s * A[2, 1]` & `r s * A[2, 2]` & `r s * A[2, 3]` \\
+        `r s * A[3, 1]` & `r s * A[3, 2]` & `r s * A[3, 3]` \\
+        `r s * A[4, 1]` & `r s * A[4, 2]` & `r s * A[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r k * s * A[1, 1]` & `r k * s * A[1, 2]` & `r k * s * A[1, 3]` \\
+        `r k * s * A[2, 1]` & `r k * s * A[2, 2]` & `r k * s * A[2, 3]` \\
+        `r k * s * A[3, 1]` & `r k * s * A[3, 2]` & `r k * s * A[3, 3]` \\
+        `r k * s * A[4, 1]` & `r k * s * A[4, 2]` & `r k * s * A[4, 3]`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+k * (s * A)
+    ```
+
+1. $\left( -1 \right) \mathbf{A} = - \mathbf{A}$
+
+    \begin{equation}
+    \begin{split}
+      \left( -1 \right) \mathbf{A}
+      &=
+      -1
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r -1 * A[1, 1]` & `r -1 * A[1, 2]` & `r -1 * A[1, 3]` \\
+        `r -1 * A[2, 1]` & `r -1 * A[2, 2]` & `r -1 * A[2, 3]` \\
+        `r -1 * A[3, 1]` & `r -1 * A[3, 2]` & `r -1 * A[3, 3]` \\
+        `r -1 * A[4, 1]` & `r -1 * A[4, 2]` & `r -1 * A[4, 3]`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+(-1) * A
+    ```
+
+1. $\mathbf{A} + \mathbf{B} = \mathbf{B} + \mathbf{A}$
+
+    \begin{equation}
+    \begin{split}
+      \mathbf{A} + \mathbf{B}
+      &=
+      \mathbf{B} + \mathbf{A} \\
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix}
+      +
+      \begin{bmatrix}
+        `r B[1, 1]` & `r B[1, 2]` & `r B[1, 3]` \\
+        `r B[2, 1]` & `r B[2, 2]` & `r B[2, 3]` \\
+        `r B[3, 1]` & `r B[3, 2]` & `r B[3, 3]` \\
+        `r B[4, 1]` & `r B[4, 2]` & `r B[4, 3]`
+      \end{bmatrix}
+      &=
+      \begin{bmatrix}
+        `r B[1, 1]` & `r B[1, 2]` & `r B[1, 3]` \\
+        `r B[2, 1]` & `r B[2, 2]` & `r B[2, 3]` \\
+        `r B[3, 1]` & `r B[3, 2]` & `r B[3, 3]` \\
+        `r B[4, 1]` & `r B[4, 2]` & `r B[4, 3]`
+      \end{bmatrix}
+      +
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix} \\
+      \begin{bmatrix}
+        `r A[1, 1] + B[1, 1]` & `r A[1, 2] + B[1, 2]` & `r A[1, 3] + B[1, 3]` \\
+        `r A[2, 1] + B[2, 1]` & `r A[2, 2] + B[2, 2]` & `r A[2, 3] + B[2, 3]` \\
+        `r A[3, 1] + B[3, 1]` & `r A[3, 2] + B[3, 2]` & `r A[3, 3] + B[3, 3]` \\
+        `r A[4, 1] + B[4, 1]` & `r A[4, 2] + B[4, 2]` & `r A[4, 3] + B[4, 3]`
+      \end{bmatrix}
+      &=
+      \begin{bmatrix}
+        `r B[1, 1] + A[1, 1]` & `r B[1, 2] + A[1, 2]` & `r B[1, 3] + A[1, 3]` \\
+        `r B[2, 1] + A[2, 1]` & `r B[2, 2] + A[2, 2]` & `r B[2, 3] + A[2, 3]` \\
+        `r B[3, 1] + A[3, 1]` & `r B[3, 2] + A[3, 2]` & `r B[3, 3] + A[3, 3]` \\
+        `r B[4, 1] + A[4, 1]` & `r B[3, 2] + A[4, 2]` & `r B[4, 3] + A[4, 3]`
+      \end{bmatrix} \\
+    \end{split}
+    \end{equation}
+
+    ```{r}
+A + B
+B + A
+    ```
+
+1. $\mathbf{A} + \left( \mathbf{B} + \mathbf{C} \right) = \left( \mathbf{A} + \mathbf{B} \right) + \mathbf{C} = \mathbf{A} + \mathbf{B} \mathbf{C}$
+
+    \begin{equation}
+      \mathbf{A}
+      +
+      \left(
+        \mathbf{B}
+        +
+        \mathbf{C}
+      \right)
+      =
+      \left(
+        \mathbf{A}
+        +
+        \mathbf{B}
+      \right)
+      +
+      \mathbf{C}
+      =
+      \mathbf{A}
+      +
+      \mathbf{B}
+      +
+      \mathbf{C}
+    \end{equation}
+
+    \begin{equation}
+    \begin{split}
+      \mathbf{A}
+      +
+      \left(
+        \mathbf{B}
+        +
+        \mathbf{C}
+      \right)
+      &=
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix}
+      +
+      \left(
+        \begin{bmatrix}
+          `r B[1, 1]` & `r B[1, 2]` & `r B[1, 3]` \\
+          `r B[2, 1]` & `r B[2, 2]` & `r B[2, 3]` \\
+          `r B[3, 1]` & `r B[3, 2]` & `r B[3, 3]` \\
+          `r B[4, 1]` & `r B[4, 2]` & `r B[4, 3]`
+        \end{bmatrix}
+        +
+        \begin{bmatrix}
+          `r C[1, 1]` & `r C[1, 2]` & `r C[1, 3]` \\
+          `r C[2, 1]` & `r C[2, 2]` & `r C[2, 3]` \\
+          `r C[3, 1]` & `r C[3, 2]` & `r C[3, 3]` \\
+          `r C[4, 1]` & `r C[4, 2]` & `r C[4, 3]`
+        \end{bmatrix}
+      \right) \\
+      &=
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix}
+      +
+      \begin{bmatrix}
+        `r B[1, 1] + C[1, 1]` & `r B[1, 2] + C[1, 2]` & `r B[1, 3] + C[1, 3]` \\
+        `r B[2, 1] + C[2, 1]` & `r B[2, 2] + C[2, 2]` & `r B[2, 3] + C[2, 3]` \\
+        `r B[3, 1] + C[3, 1]` & `r B[3, 2] + C[3, 2]` & `r B[3, 3] + C[3, 3]` \\
+        `r B[4, 1] + C[4, 1]` & `r B[4, 2] + C[4, 2]` & `r B[4, 3] + C[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r A[1, 1] + B[1, 1] + C[1, 1]` & `r A[1, 2] + B[1, 2] + C[1, 2]` & `r A[1, 3] + B[1, 3] + C[1, 3]` \\
+        `r A[2, 1] + B[2, 1] + C[2, 1]` & `r A[2, 2] + B[2, 2] + C[2, 2]` & `r A[2, 3] + B[2, 3] + C[2, 3]` \\
+        `r A[3, 1] + B[3, 1] + C[3, 1]` & `r A[3, 2] + B[3, 2] + C[3, 2]` & `r A[3, 3] + B[3, 3] + C[3, 3]` \\
+        `r A[4, 1] + B[4, 1] + C[4, 1]` & `r A[4, 2] + B[4, 2] + C[4, 2]` & `r A[4, 3] + B[4, 3] + C[4, 3]`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    \begin{equation}
+    \begin{split}
+      \left(
+        \mathbf{A}
+        +
+        \mathbf{B}
+      \right)
+      +
+      \mathbf{C}
+      &=
+      \left(
+        \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+        \end{bmatrix}
+        +
+        \begin{bmatrix}
+          `r B[1, 1]` & `r B[1, 2]` & `r B[1, 3]` \\
+          `r B[2, 1]` & `r B[2, 2]` & `r B[2, 3]` \\
+          `r B[3, 1]` & `r B[3, 2]` & `r B[3, 3]` \\
+          `r B[4, 1]` & `r B[4, 2]` & `r B[4, 3]`
+        \end{bmatrix}
+      \right)
+      +
+      \begin{bmatrix}
+        `r C[1, 1]` & `r C[1, 2]` & `r C[1, 3]` \\
+        `r C[2, 1]` & `r C[2, 2]` & `r C[2, 3]` \\
+        `r C[3, 1]` & `r C[3, 2]` & `r C[3, 3]` \\
+        `r C[4, 1]` & `r C[4, 2]` & `r C[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r A[1, 1] + B[1, 1]` & `r A[1, 2] + B[1, 2]` & `r A[1, 3] + B[1, 3]` \\
+        `r A[2, 1] + B[2, 1]` & `r A[2, 2] + B[2, 2]` & `r A[2, 3] + B[2, 3]` \\
+        `r A[3, 1] + B[3, 1]` & `r A[3, 2] + B[3, 2]` & `r A[3, 3] + B[3, 3]` \\
+        `r A[4, 1] + B[4, 1]` & `r A[4, 2] + B[4, 2]` & `r A[4, 3] + B[4, 3]`
+      \end{bmatrix}
+      +
+      \begin{bmatrix}
+        `r C[1, 1]` & `r C[1, 2]` & `r C[1, 3]` \\
+        `r C[2, 1]` & `r C[2, 2]` & `r C[2, 3]` \\
+        `r C[3, 1]` & `r C[3, 2]` & `r C[3, 3]` \\
+        `r C[4, 1]` & `r C[4, 2]` & `r C[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r A[1, 1] + B[1, 1] + C[1, 1]` & `r A[1, 2] + B[1, 2] + C[1, 2]` & `r A[1, 3] + B[1, 3] + C[1, 3]` \\
+        `r A[2, 1] + B[2, 1] + C[2, 1]` & `r A[2, 2] + B[2, 2] + C[2, 2]` & `r A[2, 3] + B[2, 3] + C[2, 3]` \\
+        `r A[3, 1] + B[3, 1] + C[3, 1]` & `r A[3, 2] + B[3, 2] + C[3, 2]` & `r A[3, 3] + B[3, 3] + C[3, 3]` \\
+        `r A[4, 1] + B[4, 1] + C[4, 1]` & `r A[4, 2] + B[4, 2] + C[4, 2]` & `r A[4, 3] + B[4, 3] + C[4, 3]`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    \begin{equation}
+    \begin{split}
+      \mathbf{A}
+      +
+      \mathbf{B}
+      +
+      \mathbf{C}
+      &=
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix}
+      +
+      \begin{bmatrix}
+        `r B[1, 1]` & `r B[1, 2]` & `r B[1, 3]` \\
+        `r B[2, 1]` & `r B[2, 2]` & `r B[2, 3]` \\
+        `r B[3, 1]` & `r B[3, 2]` & `r B[3, 3]` \\
+        `r B[4, 1]` & `r B[4, 2]` & `r B[4, 3]`
+      \end{bmatrix}
+      +
+      \begin{bmatrix}
+        `r C[1, 1]` & `r C[1, 2]` & `r C[1, 3]` \\
+        `r C[2, 1]` & `r C[2, 2]` & `r C[2, 3]` \\
+        `r C[3, 1]` & `r C[3, 2]` & `r C[3, 3]` \\
+        `r C[4, 1]` & `r C[4, 2]` & `r C[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r A[1, 1] + B[1, 1]` & `r A[1, 2] + B[1, 2]` & `r A[1, 3] + B[1, 3]` \\
+        `r A[2, 1] + B[2, 1]` & `r A[2, 2] + B[2, 2]` & `r A[2, 3] + B[2, 3]` \\
+        `r A[3, 1] + B[3, 1]` & `r A[3, 2] + B[3, 2]` & `r A[3, 3] + B[3, 3]` \\
+        `r A[4, 1] + B[4, 1]` & `r A[4, 2] + B[4, 2]` & `r A[4, 3] + B[4, 3]`
+      \end{bmatrix}
+      +
+      \begin{bmatrix}
+        `r C[1, 1]` & `r C[1, 2]` & `r C[1, 3]` \\
+        `r C[2, 1]` & `r C[2, 2]` & `r C[2, 3]` \\
+        `r C[3, 1]` & `r C[3, 2]` & `r C[3, 3]` \\
+        `r C[4, 1]` & `r C[4, 2]` & `r C[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r A[1, 1] + B[1, 1] + C[1, 1]` & `r A[1, 2] + B[1, 2] + C[1, 2]` & `r A[1, 3] + B[1, 3] + C[1, 3]` \\
+        `r A[2, 1] + B[2, 1] + C[2, 1]` & `r A[2, 2] + B[2, 2] + C[2, 2]` & `r A[2, 3] + B[2, 3] + C[2, 3]` \\
+        `r A[3, 1] + B[3, 1] + C[3, 1]` & `r A[3, 2] + B[3, 2] + C[3, 2]` & `r A[3, 3] + B[3, 3] + C[3, 3]` \\
+        `r A[4, 1] + B[4, 1] + C[4, 1]` & `r A[4, 2] + B[4, 2] + C[4, 2]` & `r A[4, 3] + B[4, 3] + C[4, 3]`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+A + (B + C)
+(A + B) + C
+A + B + C
+    ```
+
+1. $s \left( \mathbf{A} + \mathbf{B} \right) = s \mathbf{A} + s \mathbf{B}$
+
+    \begin{equation}
+    \begin{split}
+      s
+      \left(
+        \mathbf{A}
+        +
+        \mathbf{B}
+      \right)
+      &=
+      `r s`
+      \left(
+        \begin{bmatrix}
+          `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+          `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+          `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+          `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+        \end{bmatrix}
+        +
+        \begin{bmatrix}
+          `r B[1, 1]` & `r B[1, 2]` & `r B[1, 3]` \\
+          `r B[2, 1]` & `r B[2, 2]` & `r B[2, 3]` \\
+          `r B[3, 1]` & `r B[3, 2]` & `r B[3, 3]` \\
+          `r B[4, 1]` & `r B[4, 2]` & `r B[4, 3]`
+        \end{bmatrix}
+      \right) \\
+      &=
+      `r s`
+      \begin{bmatrix}
+        `r A[1, 1] + B[1, 1]` & `r A[1, 2] + B[1, 2]` & `r A[1, 3] + B[1, 3]` \\
+        `r A[2, 1] + B[2, 1]` & `r A[2, 2] + B[2, 2]` & `r A[2, 3] + B[2, 3]` \\
+        `r A[3, 1] + B[3, 1]` & `r A[3, 2] + B[3, 2]` & `r A[3, 3] + B[3, 3]` \\
+        `r A[4, 1] + B[4, 1]` & `r A[4, 2] + B[4, 2]` & `r A[4, 3] + B[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r s * (A[1, 1] + B[1, 1])` & `r s * (A[1, 2] + B[1, 2])` & `r s * (A[1, 3] + B[1, 3])` \\
+        `r s * (A[2, 1] + B[2, 1])` & `r s * (A[2, 2] + B[2, 2])` & `r s * (A[2, 3] + B[2, 3])` \\
+        `r s * (A[3, 1] + B[3, 1])` & `r s * (A[3, 2] + B[3, 2])` & `r s * (A[3, 3] + B[3, 3])` \\
+        `r s * (A[4, 1] + B[4, 1])` & `r s * (A[4, 2] + B[4, 2])` & `r s * (A[4, 3] + B[4, 3])`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+s * (A + B)
+    ```
+
+    \begin{equation}
+    \begin{split}
+      s \mathbf{A}
+      +
+      s \mathbf{B}
+      &=
+      `r s`
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix}
+      +
+      `r s`
+      \begin{bmatrix}
+        `r B[1, 1]` & `r B[1, 2]` & `r B[1, 3]` \\
+        `r B[2, 1]` & `r B[2, 2]` & `r B[2, 3]` \\
+        `r B[3, 1]` & `r B[3, 2]` & `r B[3, 3]` \\
+        `r B[4, 1]` & `r B[4, 2]` & `r B[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r s * A[1, 1]` & `r s * A[1, 2]` & `r s * A[1, 3]` \\
+        `r s * A[2, 1]` & `r s * A[2, 2]` & `r s * A[2, 3]` \\
+        `r s * A[3, 1]` & `r s * A[3, 2]` & `r s * A[3, 3]` \\
+        `r s * A[4, 1]` & `r s * A[4, 2]` & `r s * A[4, 3]`
+      \end{bmatrix}
+      +
+      \begin{bmatrix}
+        `r s * B[1, 1]` & `r s * B[1, 2]` & `r s * B[1, 3]` \\
+        `r s * B[2, 1]` & `r s * B[2, 2]` & `r s * B[2, 3]` \\
+        `r s * B[3, 1]` & `r s * B[3, 2]` & `r s * B[3, 3]` \\
+        `r s * B[4, 1]` & `r s * B[4, 2]` & `r s * B[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r (s * A[1, 1]) + (s * B[1, 1])` & `r (s * A[1, 2]) + (s * B[1, 2])` & `r (s * A[1, 3]) + (s * B[1, 3])` \\
+        `r (s * A[2, 1]) + (s * B[2, 1])` & `r (s * A[2, 2]) + (s * B[2, 2])` & `r (s * A[2, 3]) + (s * B[2, 3])` \\
+        `r (s * A[3, 1]) + (s * B[3, 1])` & `r (s * A[3, 2]) + (s * B[3, 2])` & `r (s * A[3, 3]) + (s * B[3, 3])` \\
+        `r (s * A[4, 1]) + (s * B[4, 1])` & `r (s * A[4, 2]) + (s * B[4, 2])` & `r (s * A[4, 3]) + (s * B[4, 3])`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+
+    ```{r}
+s * A + s * B
+    ```
+
+1. $\left( s + k \right) \mathbf{A} = s \mathbf{A} + k \mathbf{A}$
+
+    \begin{equation}
+    \begin{split}
+      \left(
+        s
+        +
+        k
+      \right)
+      \mathbf{A}
+      &=
+      \left(
+        `r s`
+        +
+        `r k`
+      \right)
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix} \\
+      &=
+      `r s + k`
+      \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+        `r (s + k) * (A[1, 1])` & `r (s + k) * (A[1, 2])` & `r (s + k) * (A[1, 3])` \\
+        `r (s + k) * (A[2, 1])` & `r (s + k) * (A[2, 2])` & `r (s + k) * (A[2, 3])` \\
+        `r (s + k) * (A[3, 1])` & `r (s + k) * (A[3, 2])` & `r (s + k) * (A[3, 3])` \\
+        `r (s + k) * (A[4, 1])` & `r (s + k) * (A[4, 2])` & `r (s + k) * (A[4, 3])`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+(s + k) * A
+    ```
+
+    \begin{equation}
+    \begin{split}
+      s
+      \mathbf{A}
+      +
+      k
+      \mathbf{A}
+      &=
+      `r s`
+       \begin{bmatrix}
+        `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+        `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+        `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+        `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix}
+      +
+      `r k`
+      \begin{bmatrix}
+       `r A[1, 1]` & `r A[1, 2]` & `r A[1, 3]` \\
+       `r A[2, 1]` & `r A[2, 2]` & `r A[2, 3]` \\
+       `r A[3, 1]` & `r A[3, 2]` & `r A[3, 3]` \\
+       `r A[4, 1]` & `r A[4, 2]` & `r A[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+       `r s * A[1, 1]` & `r s * A[1, 2]` & `r s * A[1, 3]` \\
+       `r s * A[2, 1]` & `r s * A[2, 2]` & `r s * A[2, 3]` \\
+       `r s * A[3, 1]` & `r s * A[3, 2]` & `r s * A[3, 3]` \\
+       `r s * A[4, 1]` & `r s * A[4, 2]` & `r s * A[4, 3]`
+      \end{bmatrix}
+      +
+      \begin{bmatrix}
+       `r k * A[1, 1]` & `r k * A[1, 2]` & `r k * A[1, 3]` \\
+       `r k * A[2, 1]` & `r k * A[2, 2]` & `r k * A[2, 3]` \\
+       `r k * A[3, 1]` & `r k * A[3, 2]` & `r k * A[3, 3]` \\
+       `r k * A[4, 1]` & `r k * A[4, 2]` & `r k * A[4, 3]`
+      \end{bmatrix} \\
+      &=
+      \begin{bmatrix}
+       `r (s * A[1, 1]) + (k * A[1, 1])` & `r (s * A[1, 2]) + (k * A[1, 2])` & `r (s * A[1, 3]) + (k * A[1, 3])` \\
+       `r (s * A[2, 1]) + (k * A[2, 1])` & `r (s * A[2, 2]) + (k * A[2, 2])` & `r (s * A[2, 3]) + (k * A[2, 3])` \\
+       `r (s * A[3, 1]) + (k * A[3, 1])` & `r (s * A[3, 2]) + (k * A[3, 2])` & `r (s * A[3, 3]) + (k * A[3, 3])` \\
+       `r (s * A[4, 1]) + (k * A[4, 1])` & `r (s * A[4, 2]) + (k * A[4, 2])` & `r (s * A[4, 3]) + (k * A[4, 3])`
+      \end{bmatrix}
+    \end{split}
+    \end{equation}
+
+    ```{r}
+s * A + k * A
+    ```
+
+1. $\mathbf{A} - \mathbf{B} = \mathbf{A} + \left(- \mathbf{B} \right)$
+
+    ```{r}
+A - B
+A + (-B)
+    ```
+
+1. $\mathbf{A} - \mathbf{B} \neq \mathbf{B} - \mathbf{A}$
+
+    ```{r}
+A - B
+B - A
+    ```
+
+
+Multiplication
+
+```{r, echo = FALSE}
+a <- c(
+  4,
+  1,
+  -4,
+  5,
+  0,
+  2
+)
+b <- c(
+  8,
+  3,
+  -2,
+  -5,
+  3,
+  1
+)
+A <- matrix(
+  data = a,
+  ncol = 3
+)
+B <- matrix(
+  data = b,
+  ncol = 2
+)
+```
+
+
+```{r}
+A %*% B
+```
