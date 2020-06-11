@@ -78,3 +78,10 @@ test_that("is.invertible is FALSE", {
     is.invertible(F)
   )
 })
+#'
+#+ testthat_03, echo=TRUE
+test_that("is.invertible is FALSE (expect_error)", {
+  expect_error(
+    is.invertible(F, stop = TRUE)
+  )
+})
