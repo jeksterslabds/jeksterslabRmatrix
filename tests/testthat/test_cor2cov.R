@@ -86,14 +86,14 @@ F <- diag(3)
 I <- diag(3)
 x <- solve(I - A)
 Sigma <- F %*% x %*% S %*% t(x) %*% t(F)
-Sigmadot <- cov2cor(Sigma)
+R <- cov2cor(Sigma)
 knitr::kable(
   x = Sigma,
   row.names = FALSE,
   caption = "Covariance Matrix ($\\boldsymbol{\\Sigma}$)"
 )
 knitr::kable(
-  x = Sigmadot,
+  x = R,
   row.names = FALSE,
   caption = "Correlation Matrix ($\\dot{\\boldsymbol{\\Sigma}}$)"
 )
@@ -115,7 +115,7 @@ results_Sigma <- cor2cov(
   cor = cor(data),
   sd = c(15, 15, 15)
 )
-results_Sigmadot <- cov2cor(
+results_R <- cov2cor(
   results_Sigma
 )
 knitr::kable(
@@ -124,7 +124,7 @@ knitr::kable(
   caption = "Covariance Matrix"
 )
 knitr::kable(
-  x = results_Sigmadot,
+  x = results_R,
   row.names = FALSE,
   caption = "Correlation Matrix"
 )
@@ -143,8 +143,8 @@ test_that("Covariance", {
 #+ testthat_02, echo=TRUE
 test_that("Correlation", {
   expect_equivalent(
-    results_Sigmadot,
-    Sigmadot,
+    results_R,
+    R,
     cor(data)
   )
 })
