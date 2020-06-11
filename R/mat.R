@@ -1,12 +1,35 @@
+#' Square Matrix
+#'
+#' Checks if a matrix is square.
+#'
+#' @author Ivan Jacob Agaloos Pesigan
+#' @param X Matrix.
+#' @return
+#'   Returns `TRUE`,
+#'   if the number of row and columns in `X` are equal.
+#'   Returns `FALSE`,
+#'   if the number of row and columns in `X` are not equal.
+#' @export
+is.square <- function(X) {
+  if (nrow(X) == ncol(X)) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}
+
 #' Positive Definite
 #'
 #' Checks if eigenvalues in a square matrix are positive.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
-#' @param x A numeric square matrix.
-#' @param tol Tolerance.
-#' @return Returns \code{FALSE}
-#'    if any of the eigenvalues are less than or equal to 0.
+#' @param X Numeric matrix.
+#'   A \eqn{p \times p} matrix.
+#' @param tol Numeric.
+#'   Tolerance.
+#' @return
+#'   Returns `FALSE`
+#'   if any of the eigenvalues are less than or equal to 0.
 #' @keywords matrix
 #' @examples
 #' Sigma <- matrix(
@@ -17,14 +40,19 @@
 #'   ),
 #'   ncol = 3
 #' )
-#' is.positive.definite(Sigma)
+#' is.positive.definite(X = Sigma)
 #' @references
 #'   [Wikipedia: Definiteness of a Matrix](https://en.wikipedia.org/wiki/Definiteness_of_a_matrix)
 #' @export
-is.positive.definite <- function(x,
+is.positive.definite <- function(X,
                                  tol = 1e-8) {
-  eigenvalues <- eigen(x = x, only.values = TRUE)$values
-  p <- nrow(x)
+  if (!is.square(X)) {
+    stop(
+      "\'X'\ is not a square matrix."
+    )
+  }
+  eigenvalues <- eigen(x = X, only.values = TRUE)$values
+  p <- nrow(X)
   for (i in 1:p) {
     if (abs(eigenvalues[i] < tol)) {
       eigenvalues[i] <- 0
@@ -41,11 +69,11 @@ is.positive.definite <- function(x,
 #' Checks if a square matrix is not invertible.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
-#' @param x A numeric square matrix.
-#' @param tol Tolerance.
-#' @return Returns \code{TRUE}
-#'    if the matrix is singular or not invertible,
-#'    meaning the determinant of the matrix is 0.
+#' @inheritParams is.positive.definite
+#' @return
+#'   Returns `TRUE`
+#'   if the matrix is singular or not invertible,
+#'   meaning the determinant of the matrix is 0.
 #' @keywords matrix
 #' @examples
 #' Sigma <- matrix(
@@ -56,13 +84,13 @@ is.positive.definite <- function(x,
 #'   ),
 #'   ncol = 3
 #' )
-#' is.singular.matrix(Sigma)
+#' is.singular.matrix(X = Sigma)
 #' @references
 #'   [Wikipedia: Singular Matrix](https://en.wikipedia.org/wiki/Singular_matrix)
 #' @export
-is.singular.matrix <- function(x,
+is.singular.matrix <- function(X,
                                tol = 1e-8) {
-  det(x) < tol
+  det(X) < tol
 }
 
 #' Correlation to Covariance
@@ -70,13 +98,16 @@ is.singular.matrix <- function(x,
 #' Converts a correlation matrix to a covariance matrix.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
-#' @param cor A \eqn{p \times p} positive definite correlation matrix.
-#' @param sd A vector of \eqn{p} standard deviations.
-#' @return Returns a covariance matrix.
+#' @param cor Numeric matrix.
+#'   A \eqn{p \times p} positive definite correlation matrix.
+#' @param sd Numeric vector.
+#'   A vector of \eqn{p} standard deviations.
+#' @return
+#'   Returns a covariance matrix.
 #' @family matrix functions
 #' @keywords matrix
 #' @examples
-#' Sigma_dot <- matrix(
+#' R <- matrix(
 #'   data = c(
 #'     1, 0.509902, 0.26,
 #'     0.509902, 1, 0.509902,
@@ -84,15 +115,19 @@ is.singular.matrix <- function(x,
 #'   ),
 #'   ncol = 3
 #' )
-#' cor2cov(cor = Sigma_dot, sd = c(15, 15, 15))
+#' cor2cov(
+#'   cor = R,
+#'   sd = c(15, 15, 15)
+#' )
 #' @export
 cor2cov <- function(cor,
                     sd) {
-  if (dim(cor)[1] == dim(cor)[2]) {
-    return(cor * tcrossprod(sd))
-  } else {
-    stop("The argument \"x\" must be a square matrix.")
+  if (!is.square(cor)) {
+    stop(
+      "\'cor'\ is not a square matrix."
+    )
   }
+  cor * tcrossprod(sd)
 }
 
 #' Trace of a square matrix
@@ -100,8 +135,9 @@ cor2cov <- function(cor,
 #' Sum of the diagonal of a square matrix.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
-#' @param x A \eqn{p \times p} matrix.
-#' @return Returns the sum of the diagonal of a square matrix.
+#' @inheritParams is.positive.definite
+#' @return
+#'   Returns the sum of the diagonal of a square matrix.
 #' @family matrix functions
 #' @keywords matrix
 #' @examples
@@ -113,16 +149,17 @@ cor2cov <- function(cor,
 #'   ),
 #'   ncol = 3
 #' )
-#' tr(Sigma)
+#' tr(X = Sigma)
 #' @references
 #'   [Wikipedia: Trace (Linear Algebra)](https://en.wikipedia.org/wiki/Trace_(linear_algebra))
 #' @export
-tr <- function(x) {
-  if (dim(x)[1] == dim(x)[2]) {
-    return(sum(diag(x)))
-  } else {
-    stop("The argument \"x\" must be a square matrix.")
+tr <- function(X) {
+  if (!is.square(X)) {
+    stop(
+      "\'X'\ is not a square matrix."
+    )
   }
+  sum(diag(X))
 }
 
 #' Lower Triangle to Symmetric
@@ -131,18 +168,23 @@ tr <- function(x) {
 #'   of a square matrix.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
-#' @param x A square matrix.
+#' @inheritParams is.positive.definite
 #' @return Returns a symmetric matrix.
 #' @family matrix functions
 #' @keywords matrix
 #' @examples
-#' x <- matrix(NA, ncol = 4, nrow = 4)
-#' x[lower.tri(x, diag = TRUE)] <- 1:10
-#' low2sym(x = x)
+#' X <- matrix(NA, ncol = 4, nrow = 4)
+#' X[lower.tri(X, diag = TRUE)] <- 1:10
+#' low2sym(X = X)
 #' @export
-low2sym <- function(x) {
-  x[upper.tri(x)] <- t(x)[upper.tri(x)]
-  return(x)
+low2sym <- function(X) {
+  if (!is.square(X)) {
+    stop(
+      "\'X'\ is not a square matrix."
+    )
+  }
+  X[upper.tri(X)] <- t(X)[upper.tri(X)]
+  X
 }
 
 #' Upper Triangle to Symmetric
@@ -151,18 +193,18 @@ low2sym <- function(x) {
 #'   of a square matrix.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
-#' @param x A square matrix.
+#' @inheritParams is.positive.definite
 #' @return Returns a symmetric matrix.
 #' @family matrix functions
 #' @keywords matrix
 #' @examples
-#' x <- matrix(NA, ncol = 4, nrow = 4)
-#' x[upper.tri(x, diag = TRUE)] <- 1:10
-#' up2sym(x = x)
+#' X <- matrix(NA, ncol = 4, nrow = 4)
+#' X[upper.tri(X, diag = TRUE)] <- 1:10
+#' up2sym(X = X)
 #' @export
-up2sym <- function(x) {
-  x[lower.tri(x)] <- t(x)[lower.tri(x)]
-  return(x)
+up2sym <- function(X) {
+  X[lower.tri(X)] <- t(X)[lower.tri(X)]
+  X
 }
 
 #' Vector to Triangular Matrix
@@ -171,19 +213,19 @@ up2sym <- function(x) {
 #'   The function can produce a strictly triangular matrix,
 #'   that is, the diagonal elements are set to zero
 #'   or a triangular matrix with diagonal values
-#'   supplied by the argument \code{x}.
+#'   supplied by the argument `x`.
 #'   Note that the matrix is filled by column.
 #' @author Ivan Jacob Agaloos Pesigan
 #' @param x A vector.
 #' @param lower Logical.
-#'   If \code{TRUE}, creates a lower triangular matrix.
-#'   If \code{FALSE}, creates an upper triangular matrix.
+#'   If `TRUE`, creates a lower triangular matrix.
+#'   If `FALSE`, creates an upper triangular matrix.
 #' @param diag Logical.
-#'   If \code{TRUE},
-#'   values of the diagonal as supplied by \code{x}.
-#'   If \code{FALSE},
+#'   If `TRUE`,
+#'   values of the diagonal as supplied by `x`.
+#'   If `FALSE`,
 #'   diagonals are set to zero and
-#'   \code{x} fills only the off-diagonal elements of the matrix
+#'   `x` fills only the off-diagonal elements of the matrix
 #'   producing a strictly triangular matrix.
 #' @examples
 #' # Stricly lower triangular matrix
