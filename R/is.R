@@ -57,6 +57,16 @@ is.square <- function(X,
 #'   if the `X` is not square and not symmetric.
 #'   Returns `TRUE`,
 #'   if the `X` is symmetric.
+#' @examples
+#' Sigma <- matrix(
+#'   data = c(
+#'     225, 112.50, 56.25,
+#'     112.5, 225, 112.5,
+#'     56.25, 112.50, 225
+#'   ),
+#'   ncol = 3
+#' )
+#' is.symmetric(X = Sigma)
 #' @export
 is.symmetric <- function(X,
                          stop = FALSE) {
@@ -242,9 +252,9 @@ is.singular <- function(X,
     stop = FALSE
   )
   if (out) {
-    out <- FALSE
+    test <- FALSE
   } else {
-    out <- TRUE
+    test <- TRUE
   }
-  out
+  test
 }
