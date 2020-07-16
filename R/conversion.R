@@ -86,7 +86,7 @@ up2sym <- function(X) {
 #'   or a triangular matrix with diagonal values
 #'   supplied by the argument `x`.
 #'   Note that the matrix is filled by column.
-#' 
+#'
 #' @author Ivan Jacob Agaloos Pesigan
 #' @param x A vector.
 #' @param lower Logical.
