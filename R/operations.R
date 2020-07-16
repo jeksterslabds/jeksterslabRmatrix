@@ -1,6 +1,6 @@
 #' Trace of a square matrix
 #'
-#' Sum of the diagonal of a square matrix.
+#' @description Sum of the diagonal of a square matrix.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #' @inheritParams is.symmetric

@@ -1,6 +1,6 @@
 #' Reindex a Symmetric Matrix.
 #'
-#' Reindex a symmetric matrix.
+#' @description Reindex a symmetric matrix.
 #'
 #' @param X Numeric matrix.
 #'   Symmetric matrix.

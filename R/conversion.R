@@ -1,6 +1,6 @@
 #' Correlation to Covariance
 #'
-#' Converts a correlation matrix to a covariance matrix.
+#' @description Converts a correlation matrix to a covariance matrix.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #' @param cor Numeric matrix.
@@ -32,7 +32,7 @@ cor2cov <- function(cor,
 
 #' Lower Triangle to Symmetric
 #'
-#' Creates a symmetric matrix from the lower triangle
+#' @description Creates a symmetric matrix from the lower triangle
 #'   of a square matrix.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
@@ -56,7 +56,7 @@ low2sym <- function(X) {
 
 #' Upper Triangle to Symmetric
 #'
-#' Creates a symmetric matrix from the upper triangle
+#' @description Creates a symmetric matrix from the upper triangle
 #'   of a square matrix.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
@@ -80,12 +80,13 @@ up2sym <- function(X) {
 
 #' Vector to Triangular Matrix
 #'
-#' Fills a matrix with a vector that represents the triangular elements.
+#' @description Fills a matrix with a vector that represents the triangular elements.
 #'   The function can produce a strictly triangular matrix,
 #'   that is, the diagonal elements are set to zero
 #'   or a triangular matrix with diagonal values
 #'   supplied by the argument `x`.
 #'   Note that the matrix is filled by column.
+#' 
 #' @author Ivan Jacob Agaloos Pesigan
 #' @param x A vector.
 #' @param lower Logical.

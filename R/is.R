@@ -1,6 +1,6 @@
 #' Square Matrix
 #'
-#' Checks if a matrix is square.
+#' @description Checks if a matrix is square.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #' @param X Numeric matrix.
@@ -41,7 +41,7 @@ is.square <- function(X,
 
 #' Symmetric Matrix
 #'
-#' Checks if a matrix is symmetric.
+#' @description Checks if a matrix is symmetric.
 #'
 #' @param X Numeric matrix.
 #'   A \eqn{p \times p} matrix.
@@ -91,7 +91,7 @@ is.symmetric <- function(X,
 
 #' Positive Definite
 #'
-#' Checks if eigenvalues in a square matrix are positive.
+#' @description Checks if eigenvalues in a square matrix are positive.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #' @param X Numeric matrix.
@@ -163,7 +163,7 @@ is.positive.definite <- function(X,
 
 #' Invertible Matrix
 #'
-#' Checks if a square matrix is invertible.
+#' @description Checks if a square matrix is invertible.
 #'
 #' @author Ivan Jacob Agaloos Pesigan
 #' @param X Numeric matrix.
@@ -226,7 +226,7 @@ is.invertible <- function(X,
 
 #' Singular Matrix
 #'
-#' Checks if a square matrix is non invertible or singular.
+#' @description Checks if a square matrix is non invertible or singular.
 #'
 #' @param stop Logical.
 #'   If `TRUE`,
