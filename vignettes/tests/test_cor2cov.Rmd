@@ -1,0 +1,176 @@
+---
+title: "Test: cor2cov"
+author: "Ivan Jacob Agaloos Pesigan"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Test: cor2cov}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r knitr_options, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  error = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+```
+
+
+
+```{r setup}
+library(testthat)
+library(MASS)
+library(jeksterslabRmatrix)
+context("Test cor2cov.")
+```
+
+
+## Parameters
+
+
+```{r parameters}
+varnames <- c("x", "m", "y")
+slopes <- runif(
+  n = 3,
+  min = .10,
+  max = .50
+)
+tau_prime <- slopes[1]
+beta <- slopes[2]
+alpha <- slopes[3]
+sigma2 <- runif(
+  n = 3,
+  min = 10^2,
+  max = 15^2
+)
+sigma2X <- sigma2[1]
+sigma2M <- sigma2[2]
+sigma2Y <- sigma2[3]
+mu <- runif(
+  n = 3,
+  min = 5^2,
+  max = 10^2
+)
+muX <- mu[1]
+muM <- mu[2]
+muY <- mu[3]
+sigma2epsilonM <- sigma2M - alpha^2 * sigma2X
+sigma2epsilonY <- sigma2Y - (beta^2 * alpha^2 * sigma2X) - (beta^2 * sigma2epsilonM) - (2 * alpha * beta * tau_prime * sigma2X) - (tau_prime^2 * sigma2X)
+delta_M <- muM - alpha * muX
+delta_Y <- muY - tau_prime * muX - beta * muM
+A <- matrix(
+  data = c(
+    0,
+    alpha,
+    tau_prime,
+    0,
+    0,
+    beta,
+    0,
+    0,
+    0
+  ),
+  ncol = 3
+)
+S <- matrix(
+  data = c(
+    sigma2X,
+    0,
+    0,
+    0,
+    sigma2epsilonM,
+    0,
+    0,
+    0,
+    sigma2epsilonY
+  ),
+  ncol = 3
+)
+F <- diag(3)
+I <- diag(3)
+x <- solve(I - A)
+Sigma <- F %*% x %*% S %*% t(x) %*% t(F)
+R <- cov2cor(Sigma)
+colnames(Sigma) <- varnames
+rownames(Sigma) <- varnames
+colnames(R) <- varnames
+rownames(R) <- varnames
+knitr::kable(
+  x = Sigma,
+  row.names = TRUE,
+  caption = "Covariance Matrix ($\\boldsymbol{\\Sigma}$)"
+)
+knitr::kable(
+  x = R,
+  row.names = TRUE,
+  caption = "Correlation Matrix ($\\dot{\\boldsymbol{\\Sigma}}$)"
+)
+```
+
+
+## Generate Data with $\hat{\boldsymbol{\Sigma}}$ equal to $\boldsymbol{\Sigma}$
+
+
+```{r data}
+data <- mvrnorm(
+  n = 1000,
+  mu = c(100, 100, 100),
+  Sigma = Sigma,
+  empirical = TRUE
+)
+```
+
+
+## Results
+
+
+```{r results}
+results_Sigma <- cor2cov(
+  cor = cor(data),
+  sd = c(15, 15, 15)
+)
+results_R <- cov2cor(
+  results_Sigma
+)
+knitr::kable(
+  x = results_Sigma,
+  row.names = TRUE,
+  caption = "Covariance Matrix"
+)
+knitr::kable(
+  x = results_R,
+  row.names = TRUE,
+  caption = "Correlation Matrix"
+)
+```
+
+
+## testthat
+
+
+```{r testthat_01, echo=TRUE}
+test_that("Covariance", {
+  expect_equivalent(
+    results_Sigma,
+    Sigma,
+    cov(data)
+  )
+})
+```
+
+
+
+```{r testthat_02, echo=TRUE}
+test_that("Correlation", {
+  expect_equivalent(
+    results_R,
+    R,
+    cor(data)
+  )
+})
+```
+
