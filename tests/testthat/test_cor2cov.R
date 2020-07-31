@@ -26,6 +26,7 @@ context("Test cor2cov.")
 #' ## Parameters
 #'
 #+ parameters
+varnames <- c("x", "m", "y")
 slopes <- runif(
   n = 3,
   min = .10,
@@ -87,14 +88,18 @@ I <- diag(3)
 x <- solve(I - A)
 Sigma <- F %*% x %*% S %*% t(x) %*% t(F)
 R <- cov2cor(Sigma)
+colnames(Sigma) <- varnames
+rownames(Sigma) <- varnames
+colnames(R) <- varnames
+rownames(R) <- varnames
 knitr::kable(
   x = Sigma,
-  row.names = FALSE,
+  row.names = TRUE,
   caption = "Covariance Matrix ($\\boldsymbol{\\Sigma}$)"
 )
 knitr::kable(
   x = R,
-  row.names = FALSE,
+  row.names = TRUE,
   caption = "Correlation Matrix ($\\dot{\\boldsymbol{\\Sigma}}$)"
 )
 #'
@@ -120,12 +125,12 @@ results_R <- cov2cor(
 )
 knitr::kable(
   x = results_Sigma,
-  row.names = FALSE,
+  row.names = TRUE,
   caption = "Covariance Matrix"
 )
 knitr::kable(
   x = results_R,
-  row.names = FALSE,
+  row.names = TRUE,
   caption = "Correlation Matrix"
 )
 #'

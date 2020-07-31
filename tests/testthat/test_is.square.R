@@ -25,22 +25,26 @@ context("Test is.square.")
 #' ## Parameters
 #'
 #+ parameters
-T <- matrix(
+matrix.T <- matrix(
   data = 1:9,
   nrow = 3
 )
-F <- matrix(
+matrix.F <- matrix(
   data = 1:10,
   ncol = 2
 )
+colnames(matrix.T) <- paste0("col", 1:ncol(matrix.T))
+rownames(matrix.T) <- paste0("row", 1:nrow(matrix.T))
+colnames(matrix.F) <- paste0("col", 1:ncol(matrix.F))
+rownames(matrix.F) <- paste0("row", 1:nrow(matrix.F))
 knitr::kable(
-  x = F,
-  row.names = FALSE,
+  x = matrix.F,
+  row.names = TRUE,
   caption = "Non-Square Matrix"
 )
 knitr::kable(
-  x = T,
-  row.names = FALSE,
+  x = matrix.T,
+  row.names = TRUE,
   caption = "Square Matrix"
 )
 #'
@@ -58,8 +62,8 @@ knitr::kable(
       "TRUE"
     ),
     Results = c(
-      is.square(F),
-      is.square(T)
+      is.square(matrix.F),
+      is.square(matrix.T)
     )
   ),
   row.names = FALSE
@@ -70,20 +74,20 @@ knitr::kable(
 #+ testthat_01, echo=TRUE
 test_that("is.square is TRUE", {
   expect_true(
-    is.square(T)
+    is.square(matrix.T)
   )
 })
 #'
 #+ testthat_02, echo=TRUE
 test_that("is.square is FALSE", {
   expect_false(
-    is.square(F)
+    is.square(matrix.F)
   )
 })
 #'
 #+ testthat_03, echo=TRUE
 test_that("is.square is FALSE (expect_error)", {
   expect_error(
-    is.square(F, stop = TRUE)
+    is.square(matrix.F, stop = TRUE)
   )
 })

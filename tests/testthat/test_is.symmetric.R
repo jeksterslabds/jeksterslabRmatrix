@@ -25,7 +25,7 @@ context("Test is.symmetric.")
 #' ## Parameters
 #'
 #+ parameters
-T <- matrix(
+matrix.T <- matrix(
   data = c(
     225, 112.50, 56.25,
     112.5, 225, 112.5,
@@ -33,11 +33,11 @@ T <- matrix(
   ),
   ncol = 3
 )
-F1 <- matrix(
+matrix.F1 <- matrix(
   data = 1:10,
   ncol = 2
 )
-F2 <- matrix(
+matrix.F2 <- matrix(
   data = c(
     225, 0, 0,
     112.5, 225, 0,
@@ -45,18 +45,24 @@ F2 <- matrix(
   ),
   ncol = 3
 )
+colnames(matrix.T) <- paste0("col", 1:ncol(matrix.T))
+rownames(matrix.T) <- paste0("row", 1:nrow(matrix.T))
+colnames(matrix.F1) <- paste0("col", 1:ncol(matrix.F1))
+rownames(matrix.F1) <- paste0("row", 1:nrow(matrix.F1))
+colnames(matrix.F2) <- paste0("col", 1:ncol(matrix.F2))
+rownames(matrix.F2) <- paste0("row", 1:nrow(matrix.F2))
 knitr::kable(
-  x = F1,
+  x = matrix.F1,
   row.names = FALSE,
   caption = "Non-Square Matrix"
 )
 knitr::kable(
-  x = F2,
+  x = matrix.F2,
   row.names = FALSE,
   caption = "Square but not Symmetric Matrix"
 )
 knitr::kable(
-  x = T,
+  x = matrix.T,
   row.names = FALSE,
   caption = "Square Matrix"
 )
@@ -77,9 +83,9 @@ knitr::kable(
       "TRUE"
     ),
     Results = c(
-      is.symmetric(F1),
-      is.symmetric(F2),
-      is.symmetric(T)
+      is.symmetric(matrix.F1),
+      is.symmetric(matrix.F2),
+      is.symmetric(matrix.T)
     )
   ),
   row.names = FALSE
@@ -90,21 +96,21 @@ knitr::kable(
 #+ testthat_01, echo=TRUE
 test_that("is.symmetric is TRUE", {
   expect_true(
-    is.symmetric(T)
+    is.symmetric(matrix.T)
   )
 })
 #'
 #+ testthat_02, echo=TRUE
 test_that("is.symmetric is FALSE", {
   expect_false(
-    is.symmetric(F1),
-    is.symmetric(F2)
+    is.symmetric(matrix.F1),
+    is.symmetric(matrix.F2)
   )
 })
 #'
 #+ testthat_03, echo=TRUE
 test_that("is.symmetric is FALSE (expect_error)", {
   expect_error(
-    is.symmetric(F2, stop = TRUE)
+    is.symmetric(matrix.F2, stop = TRUE)
   )
 })

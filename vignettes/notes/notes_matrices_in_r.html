@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ivan Jacob Agaloos Pesigan" />
 
-<meta name="date" content="2020-07-08" />
+<meta name="date" content="2020-07-31" />
 
 <title>Notes: Matrices in R</title>
 
@@ -331,7 +331,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Notes: Matrices in R</h1>
 <h4 class="author">Ivan Jacob Agaloos Pesigan</h4>
-<h4 class="date">2020-07-08</h4>
+<h4 class="date">2020-07-31</h4>
 
 
 
@@ -474,29 +474,29 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><span class="math display">\[\begin{equation}
   k
   =
-  2 ,
+  3 ,
 \end{equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
   s
   =
-  7,
+  1,
 \end{equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
   \mathbf{A}
   =
   \begin{bmatrix}
-    3 &amp; 1 &amp; 6 \\
-    7 &amp; 9 &amp; 9 \\
-    5 &amp; 7 &amp; 4
+    2 &amp; 6 &amp; 6 \\
+    2 &amp; 8 &amp; 8 \\
+    8 &amp; 5 &amp; 8
   \end{bmatrix} ,
 \end{equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
   \mathbf{B}
   =
   \begin{bmatrix}
-    2 &amp; 5 &amp; 6 \\
-    8 &amp; 3 &amp; 7 \\
-    8 &amp; 9 &amp; 4
+    4 &amp; 1 &amp; 9 \\
+    1 &amp; 1 &amp; 1 \\
+    4 &amp; 7 &amp; 5
   \end{bmatrix} ,
 \end{equation}\]</span></p>
 <p>and</p>
@@ -504,9 +504,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
   \mathbf{C}
   =
   \begin{bmatrix}
-    3 &amp; 9 &amp; 1 \\
-    4 &amp; 6 &amp; 1 \\
-    6 &amp; 8 &amp; 1
+    2 &amp; 4 &amp; 4 \\
+    2 &amp; 5 &amp; 9 \\
+    8 &amp; 9 &amp; 1
   \end{bmatrix} .
 \end{equation}\]</span></p>
 <div id="scalar-multiplication" class="section level3">
@@ -517,9 +517,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 \end{equation}\]</span></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>k <span class="op">*</span><span class="st"> </span>A</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    6    2   12</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a><span class="co">#&gt; [2,]   14   18   18</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   10   14    8</span></span></code></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    6   18   18</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a><span class="co">#&gt; [2,]    6   24   24</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   24   15   24</span></span></code></pre></div>
 <p><span class="math display">\[\begin{equation}
   s \left( k \mathbf{A} \right)
   =
@@ -531,24 +531,24 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 \end{equation}\]</span></p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>s <span class="op">*</span><span class="st"> </span>(k <span class="op">*</span><span class="st"> </span>A)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="co">#&gt; [1,]   42   14   84</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="co">#&gt; [2,]   98  126  126</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   70   98   56</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    6   18   18</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="co">#&gt; [2,]    6   24   24</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   24   15   24</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>(s <span class="op">*</span><span class="st"> </span>k <span class="op">*</span><span class="st"> </span>A)</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a><span class="co">#&gt; [1,]   42   14   84</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a><span class="co">#&gt; [2,]   98  126  126</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   70   98   56</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a><span class="co">#&gt; [1,]    6   18   18</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a><span class="co">#&gt; [2,]    6   24   24</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   24   15   24</span></span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a>(k <span class="op">*</span><span class="st"> </span>s) <span class="op">*</span><span class="st"> </span>A</span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true"></a><span class="co">#&gt; [1,]   42   14   84</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true"></a><span class="co">#&gt; [2,]   98  126  126</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a><span class="co">#&gt; [3,]   70   98   56</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true"></a><span class="co">#&gt; [1,]    6   18   18</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true"></a><span class="co">#&gt; [2,]    6   24   24</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a><span class="co">#&gt; [3,]   24   15   24</span></span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true"></a>k <span class="op">*</span><span class="st"> </span>(s <span class="op">*</span><span class="st"> </span>A)</span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true"></a><span class="co">#&gt; [1,]   42   14   84</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true"></a><span class="co">#&gt; [2,]   98  126  126</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true"></a><span class="co">#&gt; [3,]   70   98   56</span></span></code></pre></div>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true"></a><span class="co">#&gt; [1,]    6   18   18</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true"></a><span class="co">#&gt; [2,]    6   24   24</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true"></a><span class="co">#&gt; [3,]   24   15   24</span></span></code></pre></div>
 </div>
 <div id="matrix-addition-and-subtraction" class="section level3">
 <h3>Matrix addition and subtraction</h3>
@@ -558,14 +558,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 \end{equation}\]</span></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>A <span class="op">+</span><span class="st"> </span>B</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    5    6   12</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="co">#&gt; [2,]   15   12   16</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   13   16    8</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    6    7   15</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="co">#&gt; [2,]    3    9    9</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   12   12   13</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>A <span class="op">-</span><span class="st"> </span>B</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a><span class="co">#&gt; [1,]    1   -4    0</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a><span class="co">#&gt; [2,]   -1    6    2</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   -3   -2    0</span></span></code></pre></div>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a><span class="co">#&gt; [1,]   -2    5   -3</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a><span class="co">#&gt; [2,]    1    7    7</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true"></a><span class="co">#&gt; [3,]    4   -2    3</span></span></code></pre></div>
 <p><span class="math display">\[\begin{equation}
   \mathbf{A} + \mathbf{B}
   =
@@ -573,14 +573,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 \end{equation}\]</span></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>A <span class="op">+</span><span class="st"> </span>B</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    5    6   12</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a><span class="co">#&gt; [2,]   15   12   16</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   13   16    8</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    6    7   15</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a><span class="co">#&gt; [2,]    3    9    9</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   12   12   13</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a>B <span class="op">+</span><span class="st"> </span>A</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a><span class="co">#&gt; [1,]    5    6   12</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a><span class="co">#&gt; [2,]   15   12   16</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   13   16    8</span></span></code></pre></div>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a><span class="co">#&gt; [1,]    6    7   15</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a><span class="co">#&gt; [2,]    3    9    9</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   12   12   13</span></span></code></pre></div>
 <p><span class="math display">\[\begin{equation}
   \mathbf{A}
   +
@@ -606,19 +606,19 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 \end{equation}\]</span></p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>A <span class="op">+</span><span class="st"> </span>(B <span class="op">+</span><span class="st"> </span>C)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    8   15   13</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="co">#&gt; [2,]   19   18   17</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   19   24    9</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    8   11   19</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="co">#&gt; [2,]    5   14   18</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   20   21   14</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>(A <span class="op">+</span><span class="st"> </span>B) <span class="op">+</span><span class="st"> </span>C</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a><span class="co">#&gt; [1,]    8   15   13</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a><span class="co">#&gt; [2,]   19   18   17</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   19   24    9</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a><span class="co">#&gt; [1,]    8   11   19</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a><span class="co">#&gt; [2,]    5   14   18</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   20   21   14</span></span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a>A <span class="op">+</span><span class="st"> </span>B <span class="op">+</span><span class="st"> </span>C</span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true"></a><span class="co">#&gt; [1,]    8   15   13</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true"></a><span class="co">#&gt; [2,]   19   18   17</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true"></a><span class="co">#&gt; [3,]   19   24    9</span></span></code></pre></div>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true"></a><span class="co">#&gt; [1,]    8   11   19</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true"></a><span class="co">#&gt; [2,]    5   14   18</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true"></a><span class="co">#&gt; [3,]   20   21   14</span></span></code></pre></div>
 <p><span class="math display">\[\begin{equation}
   s
   \left(
@@ -633,14 +633,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 \end{equation}\]</span></p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>s <span class="op">*</span><span class="st"> </span>(A <span class="op">+</span><span class="st"> </span>B)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a><span class="co">#&gt; [1,]   35   42   84</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a><span class="co">#&gt; [2,]  105   84  112</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   91  112   56</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    6    7   15</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a><span class="co">#&gt; [2,]    3    9    9</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   12   12   13</span></span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>s <span class="op">*</span><span class="st"> </span>A <span class="op">+</span><span class="st"> </span>s <span class="op">*</span><span class="st"> </span>B</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true"></a><span class="co">#&gt; [1,]   35   42   84</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true"></a><span class="co">#&gt; [2,]  105   84  112</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   91  112   56</span></span></code></pre></div>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true"></a><span class="co">#&gt; [1,]    6    7   15</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true"></a><span class="co">#&gt; [2,]    3    9    9</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   12   12   13</span></span></code></pre></div>
 <p><span class="math display">\[\begin{equation}
   \left(
     s
@@ -657,14 +657,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 \end{equation}\]</span></p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>(s <span class="op">+</span><span class="st"> </span>k) <span class="op">*</span><span class="st"> </span>A</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a><span class="co">#&gt; [1,]   27    9   54</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a><span class="co">#&gt; [2,]   63   81   81</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   45   63   36</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a><span class="co">#&gt; [1,]    8   24   24</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a><span class="co">#&gt; [2,]    8   32   32</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a><span class="co">#&gt; [3,]   32   20   32</span></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a>s <span class="op">*</span><span class="st"> </span>A <span class="op">+</span><span class="st"> </span>k <span class="op">*</span><span class="st"> </span>A</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a><span class="co">#&gt; [1,]   27    9   54</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a><span class="co">#&gt; [2,]   63   81   81</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   45   63   36</span></span></code></pre></div>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a><span class="co">#&gt; [1,]    8   24   24</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a><span class="co">#&gt; [2,]    8   32   32</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true"></a><span class="co">#&gt; [3,]   32   20   32</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>k <span class="op">*</span><span class="st"> </span>A</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a><span class="co">#&gt;      [,1] [,2]  [,3]</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a><span class="co">#&gt; [1,]   12   20   8.5</span></span>

@@ -25,19 +25,23 @@ context("Test is.positive.definite.")
 #' ## Parameters
 #'
 #+ parameters
-F <- matrix(
+matrix.T <- diag(2)
+matrix.F <- matrix(
   data = c(1, 2, 2, 1),
   ncol = 2
 )
-T <- diag(2)
+colnames(matrix.T) <- paste0("col", 1:ncol(matrix.T))
+rownames(matrix.T) <- paste0("row", 1:nrow(matrix.T))
+colnames(matrix.F) <- paste0("col", 1:ncol(matrix.F))
+rownames(matrix.F) <- paste0("row", 1:nrow(matrix.F))
 knitr::kable(
-  x = F,
-  row.names = FALSE,
+  x = matrix.F,
+  row.names = TRUE,
   caption = "Non-Positive Definite Matrix"
 )
 knitr::kable(
-  x = T,
-  row.names = FALSE,
+  x = matrix.T,
+  row.names = TRUE,
   caption = "Positive Definite Matrix"
 )
 #'
@@ -55,8 +59,8 @@ knitr::kable(
       "TRUE"
     ),
     Results = c(
-      is.positive.definite(F),
-      is.positive.definite(T)
+      is.positive.definite(matrix.F),
+      is.positive.definite(matrix.T)
     )
   ),
   row.names = FALSE
@@ -67,20 +71,20 @@ knitr::kable(
 #+ testthat_01, echo=TRUE
 test_that("is.positive.definite is TRUE", {
   expect_true(
-    is.positive.definite(T)
+    is.positive.definite(matrix.T)
   )
 })
 #'
 #+ testthat_02, echo=TRUE
 test_that("is.positive.definite is FALSE", {
   expect_false(
-    is.positive.definite(F)
+    is.positive.definite(matrix.F)
   )
 })
 #'
 #+ testthat_03, echo=TRUE
 test_that("is.positive.definite is FALSE (expect_error)", {
   expect_error(
-    is.positive.definite(F, stop = TRUE)
+    is.positive.definite(matrix.F, stop = TRUE)
   )
 })

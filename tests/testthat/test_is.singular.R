@@ -25,20 +25,24 @@ context("Test is.singular.")
 #' ## Parameters
 #'
 #+ parameters
-F <- diag(2)
-T <- matrix(
+matrix.T <- matrix(
   data = 1,
   nrow = 2,
   ncol = 2
 )
+matrix.F <- diag(2)
+colnames(matrix.T) <- paste0("col", 1:ncol(matrix.T))
+rownames(matrix.T) <- paste0("row", 1:nrow(matrix.T))
+colnames(matrix.F) <- paste0("col", 1:ncol(matrix.F))
+rownames(matrix.F) <- paste0("row", 1:nrow(matrix.F))
 knitr::kable(
-  x = F,
-  row.names = FALSE,
+  x = matrix.F,
+  row.names = TRUE,
   caption = "Non-Singular Matrix"
 )
 knitr::kable(
-  x = T,
-  row.names = FALSE,
+  x = matrix.T,
+  row.names = TRUE,
   caption = "Singular Matrix"
 )
 #'
@@ -56,8 +60,8 @@ knitr::kable(
       "TRUE"
     ),
     Results = c(
-      is.singular(F),
-      is.singular(T)
+      is.singular(matrix.F),
+      is.singular(matrix.T)
     )
   ),
   row.names = FALSE
@@ -68,13 +72,13 @@ knitr::kable(
 #+ testthat_01, echo=TRUE
 test_that("is.singular is TRUE", {
   expect_true(
-    is.singular(T)
+    is.singular(matrix.T)
   )
 })
 #'
 #+ testthat_02, echo=TRUE
 test_that("is.singular is FALSE", {
   expect_false(
-    is.singular(F)
+    is.singular(matrix.F)
   )
 })

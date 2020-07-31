@@ -25,20 +25,24 @@ context("Test is.invertible.")
 #' ## Parameters
 #'
 #+ parameters
-T <- diag(2)
-F <- matrix(
+matrix.T <- diag(2)
+matrix.F <- matrix(
   data = 1,
   nrow = 2,
   ncol = 2
 )
+colnames(matrix.T) <- paste0("col", 1:ncol(matrix.T))
+rownames(matrix.T) <- paste0("row", 1:nrow(matrix.T))
+colnames(matrix.F) <- paste0("col", 1:ncol(matrix.F))
+rownames(matrix.F) <- paste0("row", 1:nrow(matrix.F))
 knitr::kable(
-  x = T,
-  row.names = FALSE,
+  x = matrix.T,
+  row.names = TRUE,
   caption = "Invertible Matrix"
 )
 knitr::kable(
-  x = F,
-  row.names = FALSE,
+  x = matrix.F,
+  row.names = TRUE,
   caption = "Non-Invertible Matrix"
 )
 #'
@@ -56,8 +60,8 @@ knitr::kable(
       "FALSE"
     ),
     Results = c(
-      is.invertible(T),
-      is.invertible(F)
+      is.invertible(matrix.T),
+      is.invertible(matrix.F)
     )
   ),
   row.names = FALSE
@@ -68,20 +72,20 @@ knitr::kable(
 #+ testthat_01, echo=TRUE
 test_that("is.invertible is TRUE", {
   expect_true(
-    is.invertible(T)
+    is.invertible(matrix.T)
   )
 })
 #'
 #+ testthat_02, echo=TRUE
 test_that("is.invertible is FALSE", {
   expect_false(
-    is.invertible(F)
+    is.invertible(matrix.F)
   )
 })
 #'
 #+ testthat_03, echo=TRUE
 test_that("is.invertible is FALSE (expect_error)", {
   expect_error(
-    is.invertible(F, stop = TRUE)
+    is.invertible(matrix.F, stop = TRUE)
   )
 })
